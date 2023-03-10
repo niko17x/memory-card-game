@@ -1,0 +1,70 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../../../../../../code/fonts/Lato/Lato/Lato-Black.ttf') format('.ttf');
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Lato', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+/* APP.JS */
+.app--container {
+  display: grid;
+}
+
+/* HEADER.JS */
+.header--main {
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  place-content: center;
+  text-align: center;
+  /* gap: 1.5rem; */
+}
+
+.header--main > h1 {
+  font-size: 5rem;
+  letter-spacing: 5px;
+}
+
+.header--main > img {
+  place-self: center;
+  height: 7rem;
+  width: 7rem;
+}
+
+.header--main > p {
+  opacity: 0.5;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+/* MAIN.JS */
+.card--container {
+  width: 700px;
+  display: grid;
+  place-self: center;
+  place-items: center;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, 1fr);
+  resize: both;
+  overflow: auto;
+}
+
+/* CARD.JS */
+.card--img {
+  display: grid;
+  place-content: center;
+  border: 3px solid black;
+  border-radius: 3px;
+  width: 150px;
+  height: 150px;
+}
