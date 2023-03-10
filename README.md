@@ -17,3 +17,21 @@
     - If user does not select the correct matching card, timer ends as game is lost.
     - If user selects the last correct matching card on level 10, the timer ends as game is won.
     - If a better time is registered after game win, a new score will be introduced and saved.
+
+
+• Game Setup:
+  • Components:
+    • Header.js
+      - Display title.
+    • Main.js
+      • DisplayTimer.js
+        - Display game timer.
+      • DisplayLevel.js
+        - Display current level.
+      • DisplayScore.js
+        - Display current score. => Every matching pair equates to 1 point.
+      • Cards.js
+        - Display each card.
+
+  • Data Files:
+    • cardData.js => Database containing all the images for the game.
