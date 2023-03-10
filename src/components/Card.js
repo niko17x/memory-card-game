@@ -25,6 +25,18 @@ function Card(props) {
       case 6:
         i = 8;
         break;
+      case 7:
+        i = 9;
+        break;
+      case 8:
+        i = 10;
+        break;
+      case 9:
+        i = 11;
+        break;
+      case 10:
+        i = 12;
+        break;
       default:
         i = null;
     }
@@ -32,18 +44,26 @@ function Card(props) {
   };
 
   const createNewCardSet = () => {
-    let currentLevel = setCardsByLevel();
-    let result = [];
+    const cardQuantityByLevel = setCardsByLevel();
+    const uniqueCards = new Set(cardData.map((card) => card.id)); // 'set' => unique values only.
+    const maxCards = Math.min(cardQuantityByLevel, uniqueCards.size);
+    const result = [];
 
-    while (result.length < currentLevel) {
-      const randomIndex = Math.floor(Math.random() * 6);
+    const selectedIds = new Set();
+
+    while (result.length < maxCards) {
+      const randomIndex = Math.floor(Math.random() * cardData.length);
       const newCard = {
         url: cardData[randomIndex].url,
         id: cardData[randomIndex].id,
       };
-      if (!result.some((card) => card.id === newCard.id)) {
+      // Validate the id is legitimate and id is not already in selectedIds :
+      if (uniqueCards.has(newCard.id) && !selectedIds.has(newCard.id)) {
         result.push(newCard);
+        selectedIds.add(newCard.id);
       }
+      console.log(maxCards);
+      console.log(cardQuantityByLevel, uniqueCards.size);
     }
     return result;
   };
@@ -56,11 +76,10 @@ function Card(props) {
     let allNewCardSet = createNewCardSet();
     let duplicatedCards = [];
 
-    allNewCardSet.map((card) => {
+    allNewCardSet.forEach((card) => {
       for (let i = 0; i < 2; i++) {
         duplicatedCards.push(card);
       }
-      return duplicatedCards;
     });
     duplicatedCards.sort(randomizeNewCardSet);
     return duplicatedCards;
@@ -79,7 +98,6 @@ function Card(props) {
     return allCards;
   };
 
-  // return <div className="card--container">{duplicateNewCardSet()}</div>;
   return <div className="card--container">{displayNewCardSet()}</div>;
 }
 
