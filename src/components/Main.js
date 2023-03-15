@@ -1,5 +1,6 @@
 // MAIN SECTION UNDER HEADER.
 
+import { v4 as uuidv4 } from "uuid";
 import React from "react";
 import Card from "./Card";
 import Timer from "./Timer";
@@ -26,25 +27,19 @@ function Main() {
   };
 
   const triggerNextLevel = () => {
-    // console.log("gameLevel", gameLevel);
-    // console.log("currentCards", currentCards);
     return currentCards.every((card) => !card.hidden)
       ? setGameLevel((prevLevel) => prevLevel + 1)
       : null;
   };
 
-  // ??? Currently causing both matching cards to be revealed on click instead of just one.
   // If player clicks on card, remove display: hidden :
   const revealCard = (e) => {
+    const targetUuid = e.target.firstElementChild.getAttribute("data-uuid");
     setCurrentCards((prevCards) =>
       prevCards.map((card) => {
-        // console.log(e.target.firstElementChild.id);
-        return card.id === parseInt(e.target.firstElementChild.id)
-          ? { ...card, hidden: false }
-          : card;
+        return card.uuid === targetUuid ? { ...card, hidden: false } : card;
       })
     );
-    // console.log(currentCards);
   };
 
   // CARD.JS transfer :
@@ -71,12 +66,12 @@ function Main() {
       const randomIndex = Math.floor(Math.random() * cardData.length);
       const newCard = {
         url: cardData[randomIndex].url,
-        id: cardData[randomIndex].id,
+        id: parseInt(cardData[randomIndex].id),
         hidden: true,
       };
       // Validate the id is legitimate and id is not already in selectedIds :
       if (uniqueCards.has(newCard.id) && !selectedIds.has(newCard.id)) {
-        result.push(newCard);
+        result.push({ ...newCard, uuid: uuidv4() });
         selectedIds.add(newCard.id);
       }
     }
@@ -93,10 +88,11 @@ function Main() {
 
     allNewCardSet.forEach((card) => {
       for (let i = 0; i < 2; i++) {
-        duplicatedCards.push(card);
+        duplicatedCards.push({ ...card, uuid: uuidv4() }); // Spread the card properties into a new object
       }
     });
     duplicatedCards.sort(randomizeNewCardSet);
+    console.log(duplicatedCards);
     return duplicatedCards;
   };
 
@@ -108,9 +104,7 @@ function Main() {
       </div>
       <Card
         level={gameLevel}
-        // handleClick={revealCard}
         handleClick={handleClick}
-        // newCards={duplicateNewCardSet()}
         newCards={currentCards}
       />
     </>
