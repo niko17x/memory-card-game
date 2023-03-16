@@ -47,6 +47,19 @@ body {
 }
 
 /* MAIN.JS */
+.main--score_tracker {
+  display: grid;
+  place-self: center;
+  place-content: center;
+  gap: 1rem;
+  width: 800px;
+  padding-top: 20px;
+  font-size: 2rem;
+  border-bottom: 3px solid rgb(214, 214, 214);
+}
+
+
+/* CARD.JS */
 .card--container {
   width: 700px;
   display: grid;
@@ -57,9 +70,9 @@ body {
   grid-template-rows: repeat(2, 1fr);
   resize: both;
   overflow: auto;
+  padding-block: 50px;
 }
 
-/* CARD.JS */
 .card--img {
   display: grid;
   place-content: center;
@@ -67,4 +80,11 @@ body {
   border-radius: 3px;
   width: 150px;
   height: 150px;
+  cursor: pointer;
 }
+
+/* TIMER.JS */
+.timer--container {
+  text-align: center;
+}
+

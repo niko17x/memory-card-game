@@ -1,46 +1,46 @@
 // HOLDS DATA FOR GAME CARDS.
 
-const allUrl = [
+const cardData = [
   {
     url: "../flash.svg",
     id: 1,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../bender.svg",
     id: 2,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../mario.svg",
     id: 3,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../ninja-turtle.svg",
     id: 4,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../rick.svg",
     id: 5,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../stitch.svg",
     id: 6,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../thor.svg",
     id: 7,
-    hidden: false,
+    hidden: true,
   },
   {
     url: "../woody.svg",
     id: 8,
-    hidden: false,
+    hidden: true,
   },
 ];
 
-export default allUrl;
+export default cardData;
