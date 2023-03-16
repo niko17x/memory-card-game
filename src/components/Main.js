@@ -6,24 +6,25 @@ import Card from "./Card";
 import Timer from "./Timer";
 import Levels from "./Levels";
 import cardData from "../cardData";
+import RestartBtn from "./RestartBtn";
 
 function Main() {
   const [gameLevel, setGameLevel] = React.useState(1);
   const [currentCards, setCurrentCards] = React.useState(cardData);
+  const [cardIds, setCardIds] = React.useState(null);
+  const [playGame, setPlayGame] = React.useState(true);
 
-  // console.log(currentCards);
-
-  // Generate new cards whenever gameLevel changes :
-  // * Remember => useEffect runs one time in the initial phase - so on load, it will render. *
   React.useEffect(() => {
-    // If gameLevel changes state, then re-render a new set of cards here...
     const newCardSet = duplicateNewCardSet();
     setCurrentCards(newCardSet);
-  }, [gameLevel]);
+  }, [playGame, gameLevel]);
+
+  console.log(playGame);
 
   const handleClick = (e) => {
     revealCard(e);
     triggerNextLevel();
+    trackPlayedCards(e);
   };
 
   const triggerNextLevel = () => {
@@ -32,17 +33,37 @@ function Main() {
       : null;
   };
 
-  // If player clicks on card, remove display: hidden :
   const revealCard = (e) => {
-    const targetUuid = e.target.firstElementChild.getAttribute("data-uuid");
+    const dataUuid =
+      e.currentTarget.firstElementChild.getAttribute("data-uuid");
     setCurrentCards((prevCards) =>
       prevCards.map((card) => {
-        return card.uuid === targetUuid ? { ...card, hidden: false } : card;
+        return card.uuid === dataUuid ? { ...card, hidden: false } : card;
       })
     );
   };
 
-  // CARD.JS transfer :
+  const trackPlayedCards = (e) => {
+    // Account for parent div click and child image click :
+    const targetElement =
+      e.target.tagName === "IMG" ? e.target : e.target.firstElementChild;
+
+    if (targetElement.hasAttribute("id")) {
+      // If state is equal to null, then store new state and just return :
+      if (!cardIds) return setCardIds(parseInt(targetElement.id));
+
+      // If user clicks on non-matching cards :
+      if (parseInt(targetElement.id) !== cardIds) {
+        console.log("Lose");
+        setPlayGame(false);
+        // If user clicks on matching cards :
+      } else {
+        console.log("Win");
+      }
+      setCardIds(null); // Reset to null after every 2 card clicks.
+    }
+  };
+
   const setCardsByLevel = () => {
     let level = gameLevel;
     let i = 0;
@@ -57,7 +78,7 @@ function Main() {
 
   const createNewCardSet = () => {
     const cardQuantityByLevel = setCardsByLevel();
-    const uniqueCards = new Set(cardData.map((card) => card.id)); // 'set' => unique values only.
+    const uniqueCards = new Set(cardData.map((card) => card.id)); // 'set' => store unique values only.
     const maxCards = Math.min(cardQuantityByLevel, uniqueCards.size);
     const result = [];
     const selectedIds = new Set();
@@ -69,7 +90,6 @@ function Main() {
         id: parseInt(cardData[randomIndex].id),
         hidden: true,
       };
-      // Validate the id is legitimate and id is not already in selectedIds :
       if (uniqueCards.has(newCard.id) && !selectedIds.has(newCard.id)) {
         result.push({ ...newCard, uuid: uuidv4() });
         selectedIds.add(newCard.id);
@@ -92,8 +112,11 @@ function Main() {
       }
     });
     duplicatedCards.sort(randomizeNewCardSet);
-    console.log(duplicatedCards);
     return duplicatedCards;
+  };
+
+  const gameIsRestarted = () => {
+    // if (!playGame)
   };
 
   return (
@@ -102,11 +125,15 @@ function Main() {
         <Timer />
         <Levels currentLevel={gameLevel} />
       </div>
-      <Card
-        level={gameLevel}
-        handleClick={handleClick}
-        newCards={currentCards}
-      />
+      {playGame ? (
+        <Card
+          level={gameLevel}
+          handleClick={handleClick}
+          newCards={currentCards}
+        />
+      ) : (
+        <RestartBtn setGame={setPlayGame} />
+      )}
     </>
   );
 }
